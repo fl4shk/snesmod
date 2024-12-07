@@ -53,6 +53,7 @@ namespace ConversionInput {
 	
 	OperationData::OperationData( int argc,  char *argv[] ) {
 
+		volume = "80";
 		spc_mode = true;
 		show_help = false;
 		hirom = false;
@@ -82,6 +83,15 @@ namespace ConversionInput {
 							return;
 						}
 						output = argv[arg];
+
+					} else if( TESTARG2( "--volume", "-u" ) ) {
+
+						arg++;
+						if( arg == argc ) {
+							printf( "some kind of error.\n" );
+							return;
+						}
+						volume = argv[arg];
 
 					} else if( TESTARG2( "--hirom", "-h" )) {
 						hirom = true;

@@ -98,6 +98,7 @@ namespace ConversionInput {
 		OperationData( int argc, char *argv[] );
 
 		std::string output;
+		std::string volume;
 		bool hirom;
 		std::vector<const char *> files;
 		bool spc_mode;

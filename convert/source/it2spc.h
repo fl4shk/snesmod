@@ -127,8 +127,8 @@ namespace IT2SPC {
 		std::vector<Sample*> Samples;
 		
 
-		void Module::ParseSMOption( const char * );
-		void Module::ParseSMOptions( const ITLoader::Module & );
+		void ParseSMOption( const char * );
+		void ParseSMOptions( const ITLoader::Module & );
 		
 	public:
 		Module( 
@@ -169,7 +169,7 @@ namespace IT2SPC {
 		void ExportASM( const char *, const char * ) const;
 		void ExportINC( const char * ) const;
 
-		void MakeSPC( const char * ) const;
+		void MakeSPC( const char *, const char * ) const;
 	};
 }
 

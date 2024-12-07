@@ -9,6 +9,7 @@
 #include "it2spc.h"
 #include "itloader.h"
 #include "math.h"
+#include <cstdlib>
 
 extern bool VERBOSE;
 
@@ -599,7 +600,7 @@ namespace IT2SPC {
 	 *
 	 ***********************************************************************************************/
 
-	void Bank::MakeSPC( const char *spcfile ) const {
+	void Bank::MakeSPC( const char *spcfile, const char *volume ) const {
 		std::string nstr;
 
 		IO::File file( spcfile, IO::MODE_WRITE );
@@ -637,7 +638,7 @@ namespace IT2SPC {
 			file.WriteAsciiF( "180", 3 );
 			file.WriteAsciiF( "5000", 5 );
 			file.WriteAsciiF( "<INSERT SONG ARTIST>", 32 );
-			file.Write8( 0);
+			file.Write8( 0 );
 			file.Write8( '0' );
 			file.ZeroFill( 45 ); // reserved
 
@@ -652,10 +653,15 @@ namespace IT2SPC {
 			
 			// write spc program
 			for( int i = 0; i < sizeof( spc_program ); i++ ) {
-				if( i == 0x3C || i == 0x3D ) // PATCH
+				if( i == 0x3C || i == 0x3D ) {// PATCH
 					file.Write8( 0 );
-				else
+				} else if( i == 0x25 || i == 0x2b ) { // INITIAL VOLUME PATCH 
+					file.Write8(
+						atoi(volume)
+					);
+				} else {
 					file.Write8( spc_program[i] );
+				}
 			}
 			
 			// zero fill upto module base

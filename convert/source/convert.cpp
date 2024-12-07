@@ -26,6 +26,8 @@ const char USAGE[] = {
 	"--output     (Specify SPC file for -b option)\n"
 	"             (Specify filename base for soundbank creation)\n"
 	"             (Required for soundbank mode)\n"
+	"-u [vol]   Specify overall volume.\n"
+	"--volume     (Valid values are 0-127).\n"
 	"-h         Use HIROM mapping mode for soundbank.\n"
 	"--hirom\n"
 	"-v         Enable verbose output.\n"
@@ -76,7 +78,7 @@ int main( int argc, char *argv[] ) {
 	
 	// export products
 	if( od.spc_mode ) {
-		result.MakeSPC( od.output.c_str() );
+		result.MakeSPC( od.output.c_str(), od.volume.c_str() );
 	} else {
 		result.Export( od.output.c_str() );
 	}
