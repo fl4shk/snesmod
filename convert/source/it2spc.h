@@ -79,7 +79,16 @@ namespace IT2SPC {
 		~Instrument();
 
 		int GetExportSize() const {
-			return 5 + (!EnvelopeLength) ? 0 : (3 + (EnvelopeLength/4) * 4);
+			// FL4SHK NOTE:
+			// `5 + (!EnvelopeLength)` was being used as the condition of the `?:` operator,
+			// instead of the intended `(!EnvelopeLength)`.
+			// This is a bug that I've apparently fixed now.
+			return (
+				5
+				+ (
+					(!EnvelopeLength) ? 0 : (3 + (EnvelopeLength/4) * 4)
+				)
+			);
 		}
 		
 		void Export( IO::File & ) const;
@@ -169,7 +178,7 @@ namespace IT2SPC {
 		void ExportASM( const char *, const char * ) const;
 		void ExportINC( const char * ) const;
 
-		void MakeSPC( const char *, const char * ) const;
+		void MakeSPC( const ConversionInput::OperationData &) const;
 	};
 }
 

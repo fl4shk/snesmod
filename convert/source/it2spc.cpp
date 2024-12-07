@@ -600,7 +600,15 @@ namespace IT2SPC {
 	 *
 	 ***********************************************************************************************/
 
-	void Bank::MakeSPC( const char *spcfile, const char *volume ) const {
+	void Bank::MakeSPC( const ConversionInput::OperationData &od ) const {
+		const char *spcfile = od.output.c_str();
+		const char *volume = od.extra_spc_options.volume.c_str();
+		const char *artist = od.extra_spc_options.artist.c_str();
+		const char *song_title = od.extra_spc_options.song_title.c_str();
+		const char *game_title = od.extra_spc_options.game_title.c_str();
+		const char *length_seconds = od.extra_spc_options.length_seconds.c_str();
+		const char *length_fade = od.extra_spc_options.length_fade.c_str();
+
 		std::string nstr;
 
 		IO::File file( spcfile, IO::MODE_WRITE );
@@ -630,14 +638,14 @@ namespace IT2SPC {
 			file.Write16( 0 );		// reserved
 
 			// ID666 tag
-			file.WriteAsciiF( "<INSERT SONG TITLE>", 32 );
-			file.WriteAsciiF( "<INSERT GAME TITLE>", 32 );
+			file.WriteAsciiF( song_title, 32 );
+			file.WriteAsciiF( game_title, 32 );
 			file.WriteAsciiF( "NAME OF DUMPER", 16 );
 			file.WriteAsciiF( "comments...", 32 );
 			file.WriteAsciiF( "", 11 );
-			file.WriteAsciiF( "180", 3 );
-			file.WriteAsciiF( "5000", 5 );
-			file.WriteAsciiF( "<INSERT SONG ARTIST>", 32 );
+			file.WriteAsciiF( length_seconds, 3 );
+			file.WriteAsciiF( length_fade, 5 );
+			file.WriteAsciiF( artist, 32 );
 			file.Write8( 0 );
 			file.Write8( '0' );
 			file.ZeroFill( 45 ); // reserved

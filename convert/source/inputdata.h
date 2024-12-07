@@ -88,6 +88,19 @@ namespace ConversionInput {
 */
 	class OperationData {
 
+	public:
+
+		class ExtraSpcOptions {
+
+		public:
+			std::string volume;
+			std::string artist;
+			std::string song_title;
+			std::string game_title;
+			std::string length_seconds;
+			std::string length_fade;
+		};
+
 	private:
 		
 
@@ -97,8 +110,9 @@ namespace ConversionInput {
 
 		OperationData( int argc, char *argv[] );
 
+		ExtraSpcOptions extra_spc_options;
+
 		std::string output;
-		std::string volume;
 		bool hirom;
 		std::vector<const char *> files;
 		bool spc_mode;

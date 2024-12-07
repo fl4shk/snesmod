@@ -52,8 +52,23 @@ namespace ConversionInput {
 	}
 	
 	OperationData::OperationData( int argc,  char *argv[] ) {
+		//--------
+		std::string &volume = extra_spc_options.volume;
+		std::string &artist = extra_spc_options.artist;
+		std::string &song_title = extra_spc_options.song_title;
+		std::string &game_title = extra_spc_options.game_title;
+		std::string &length_seconds = extra_spc_options.length_seconds;
+		std::string &length_fade = extra_spc_options.length_fade;
 
-		volume = "80";
+		// FL4SHK NOTE: 80 was the volume set in `spc_program`, so make it the default here.
+		// Other options I added had their defaults defined in the other parts of the C++ code
+		volume = "80"; 
+		song_title = "<INSERT SONG TITLE>";
+		game_title = "<INSERT GAME TITLE>";
+		artist = "<INSERT SONG ARTIST>";
+		length_seconds = "180";
+		length_fade = "5000";
+
 		spc_mode = true;
 		show_help = false;
 		hirom = false;
@@ -88,10 +103,80 @@ namespace ConversionInput {
 
 						arg++;
 						if( arg == argc ) {
-							printf( "some kind of error.\n" );
+							printf( "error: missing parameter for --volume.\n" );
 							return;
 						}
 						volume = argv[arg];
+
+					} else if( TESTARG2( "--artist", "-a" ) ) {
+
+						arg++;
+						if( arg == argc ) {
+							printf( "error: missing parameter for --artist.\n" );
+							return;
+						}
+						artist = argv[arg];
+
+					} else if( TESTARG2( "--song-title", "-t" ) ) {
+
+						arg++;
+						if( arg == argc ) {
+							printf( "error: missing parameter for --song-title.\n" );
+							return;
+						}
+						song_title = argv[arg];
+
+					} else if( TESTARG2( "--game-title", "-g" ) ) {
+
+						arg++;
+						if( arg == argc ) {
+							printf( "error: missing parameter for --game-title.\n" );
+							return;
+						}
+						game_title = argv[arg];
+
+					} else if( TESTARG2( "--length", "-l" ) ) {
+
+						arg++;
+						if( arg == argc ) {
+							printf( "error: missing parameter for --length.\n" );
+							return;
+						}
+						const std::string length_pair = argv[arg];
+						const std::size_t first_sep = length_pair.find_first_of(":");
+
+						if( first_sep == 0 ) {
+							printf( 
+								"error: for --length parameter, missing \"seconds\" "
+								"(and maybe \"fade\").\n" 
+							);
+							return;
+						} else if( first_sep == std::string::npos ) {
+							printf( "error: for --length parameter, missing \":\" and \"fade\".\n" );
+							return;
+						} else if( first_sep == length_pair.size() - 1 ) {
+							printf( "error: for --length parameter, missing \"fade\".\n" );
+							return;
+						}
+
+						length_seconds = length_pair.substr(0, first_sep);
+						length_fade = length_pair.substr(first_sep + 1);
+						if ( length_seconds.size() != 3 ) {
+							printf(
+								"error: for --length parameter of \"seconds\", "
+								"need an exact length of 3 characters "
+								"(see --help output for --length).\n"
+							);
+							return;
+						}
+						if ( length_fade.size() != 5 ) {
+							printf(
+								"error: for --length parameter of \"fade\", "
+								"need an exact length of 5 characters "
+								"(see --help output for --length).\n"
+							);
+							return;
+						}
 
 					} else if( TESTARG2( "--hirom", "-h" )) {
 						hirom = true;
